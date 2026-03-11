@@ -1,0 +1,20 @@
+require('dotenv').config();
+const express = require('express');
+const connectDB = require('./config/db');
+
+const userRoutes = require('./routes/user.route');
+const subRoutes = require('./routes/sub.route');
+const adminRoutes = require('./routes/admin.route');
+
+const app = express();
+connectDB();
+app.use(express.json());
+
+app.use('/api/users', userRoutes);
+app.use('/api/subscriptions', subRoutes);
+app.use('/api/admin', adminRoutes);
+
+app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log('Server running on port ' + PORT));
