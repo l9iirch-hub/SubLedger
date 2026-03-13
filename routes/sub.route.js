@@ -1,17 +1,14 @@
 const express = require('express');
 const router = express.Router();
-
-const { createSub, getSubs, getSub, updateSub, deleteSub } = require('../controllers/sub.controller');
+const auth = require('../middlewares/auth.middleware');
 const validate = require('../middlewares/validation.middleware');
-const { createSubValidation } = require('../validations/sub.validations');
-const authMiddleware = require('../middlewares/auth.middleware');
+const { subValidation } = require('../validations/sub.validations');
+const { createSub, getSubs, getSub, updateSub, deleteSub } = require('../controllers/sub.controller');
 
-router.use(authMiddleware);
-
-router.post('/', validate(createSubValidation), createSub);
-router.get('/', getSubs);
-router.get('/:id', getSub);
-router.put('/:id', validate(createSubValidation), updateSub);
-router.delete('/:id', deleteSub);
+router.post('/', auth, validate(subValidation), createSub);
+router.get('/', auth, getSubs);
+router.get('/:id', auth, getSub);
+router.put('/:id', auth, validate(subValidation), updateSub);
+router.delete('/:id', auth, deleteSub);
 
 module.exports = router;
